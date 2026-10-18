@@ -1,0 +1,25 @@
+{
+  "serverTitle": "DSH Codex MCP bridge",
+  "instructions": "This server bridges development tasks to the local DSH (DeepSeek Harness) headless runner.\n- dsh_env: inspect the environment first (versions, CLI path, token, ready-made codex config).\n- dsh_run: start a fresh DSH session for a task. State the goal, constraints and acceptance command; DSH reads/writes files and runs commands itself. Pass the project root as cwd.\n- dsh_resume: continue the session returned by dsh_run; reuse the same cwd.\n- Success means: final event present, turn_end=completed, exit code 0. Otherwise the tool result carries isError plus diagnostics.\n- Verify the delivered work independently (for example `node --test test\\*.test.mjs`); do not treat DSH's own summary as acceptance.",
+  "tools": {
+    "dsh_env": {
+      "title": "DSH environment check",
+      "description": "Returns plugin version, MCP URL and token, DSH CLI path and version, profile, DSH_HOME, permission mode, node runtime, default timeout and concurrency limit, plus a [mcp_servers.dsh_codex] block ready to paste into Codex config.toml. Read-only; starts no task."
+    },
+    "dsh_run": {
+      "title": "Run a task with DSH (new session)",
+      "description": "Starts a fresh DSH headless session in the given working directory and returns the final answer, session id, exit code, turn_end, token usage and a resume hint. DSH really edits files and runs commands. On failure (timeout, non-zero exit, empty answer, turn_end not completed) the result is marked isError and includes the stderr tail and event counts.",
+      "task": "Task description for DSH. Include the goal, constraints (e.g. \"Node built-ins only\", \"do not touch other files\") and how to verify. The text is piped verbatim to DSH's stdin.",
+      "cwd": "Working directory (project root) for the task; must be an existing absolute path. Defaults to the plugin's defaultCwd.",
+      "timeout_sec": "Timeout in seconds. Defaults to the plugin's defaultTimeoutSec (3600). A timeout kills the whole process tree."
+    },
+    "dsh_resume": {
+      "title": "Resume an existing DSH session",
+      "description": "Continues an existing session (its context is kept) and returns the new final answer and usage. cwd must match the one the session was created with, otherwise DSH refuses.",
+      "session_id": "Session id returned by a previous dsh_run/dsh_resume call (e.g. session-xxxxxxxx-...)."
+    },
+    "common": {
+      "include_events": "Attach the tail of DSH's NDJSON event stream to the result (summary only by default; enable when debugging)."
+    }
+  }
+}

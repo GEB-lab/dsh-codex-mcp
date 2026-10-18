@@ -1,0 +1,25 @@
+{
+  "serverTitle": "DSH Codex MCP 桥",
+  "instructions": "这是把开发任务派给本机 DSH(DeepSeek Harness) headless 的桥。\n- dsh_env：先检查环境（版本、CLI 路径、token、codex 配置片段）。\n- dsh_run：新开一个 DSH 会话执行任务；task 写清楚目标、约束和验收命令，DSH 会自己读写文件、跑命令。cwd 传项目根目录。\n- dsh_resume：在 dsh_run 返回的 session 上续跑，必须使用同一个 cwd。\n- 成功判据：DSH 返回 final 且 turn_end=completed、退出码 0；否则工具结果会带 isError 和诊断。\n- 任务完成后请自己再独立复核一次（例如 node --test test\\*.test.mjs），不要把 DSH 的自述当成验收。",
+  "tools": {
+    "dsh_env": {
+      "title": "DSH 环境自检",
+      "description": "返回插件版本、MCP 地址与 token、DSH CLI 路径与版本、profile、DSH_HOME、权限模式、node 运行时、默认超时与并发上限，并给出可直接粘贴到 Codex config.toml 的 [mcp_servers.dsh_codex] 片段。只读，不启动任何任务。"
+    },
+    "dsh_run": {
+      "title": "让 DSH 执行任务（新会话）",
+      "description": "在指定工作目录启动 DSH headless 新会话执行一个开发任务，返回最终答案、session id、退出码、turn_end、token 用量与续跑提示。DSH 会实际读写文件并执行命令；失败（超时/非零退出/空答案/turn_end 非 completed）时结果标记 isError 并附带 stderr 尾部与事件统计。",
+      "task": "给 DSH 的任务描述。写清目标、约束（例如“只用 Node 内置模块”“不要改其他文件”）、验收方式。任务文本会原样通过 stdin 传给 DSH。",
+      "cwd": "任务的工作目录（项目根），必须是已存在的绝对路径；省略时用插件配置的 defaultCwd。",
+      "timeout_sec": "超时秒数，默认取插件配置 defaultTimeoutSec（3600）。超时会杀掉整棵进程树。"
+    },
+    "dsh_resume": {
+      "title": "DSH 续跑既有会话",
+      "description": "在已有 session 上继续对话式开发（保留上下文），返回新的最终答案与用量。cwd 必须与创建该会话时一致，否则 DSH 会拒绝。",
+      "session_id": "上一次 dsh_run/dsh_resume 返回的 session id（形如 session-xxxxxxxx-...）。"
+    },
+    "common": {
+      "include_events": "是否在结果里附上 DSH 的 NDJSON 事件流尾部（默认只给摘要，排障时打开）。"
+    }
+  }
+}

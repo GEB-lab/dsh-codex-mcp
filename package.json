@@ -1,0 +1,53 @@
+{
+  "name": "dsh-codex-mcp",
+  "version": "0.1.0",
+  "description": "MCP bridge for DSH: a loopback Streamable HTTP MCP server inside DeepSeek Harness that lets Codex dispatch coding tasks to a DSH headless agent. · 让 Codex 通过 MCP 把开发任务派给 DSH 的桥",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "mcp",
+    "codex",
+    "headless"
+  ],
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./server": "./lib/server.js"
+  },
+  "icon": "./icon.svg",
+  "files": [
+    "index.js",
+    "lib",
+    "locale",
+    "scripts",
+    "icon.svg",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "serve": "node index.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GEB-lab/dsh-codex-mcp.git"
+  },
+  "homepage": "https://github.com/GEB-lab/dsh-codex-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/GEB-lab/dsh-codex-mcp/issues"
+  },
+  "author": "GEB-lab",
+  "license": "MIT"
+}

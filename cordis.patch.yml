@@ -1,0 +1,43 @@
+# ============================================================================
+# dsh-codex-mcp — DSH bundle patch
+# ============================================================================
+# Mount declaration for the plugin. DSH stacks every bundle's patch layer over
+# the profile config; this inserts the plugin entry, whose apply() starts a
+# loopback-only Streamable HTTP MCP server inside the DSH host process:
+#
+#   Codex (~/.codex/config.toml)
+#     [mcp_servers.dsh_codex]
+#     url = "http://127.0.0.1:39391/mcp"
+#     http_headers = { Authorization = "Bearer <token>" }
+#
+# Install (the desktop profile is managed by the desktop app, so use its own
+# dsh launcher — a bare `node bin.js` is refused for that profile):
+#   dsh plugin --profile desktop add github:GEB-lab/dsh-codex-mcp
+#
+# Every value below is optional; the defaults are shown. Paths accept `~/`
+# and relative paths. The bearer token file defaults to
+# `$DSH_HOME/codex-mcp.token` ($DSH_HOME = ~/.dsh when unset) and is created
+# on first start with 0600 permissions.
+# ============================================================================
+
+- insert:
+    - id: dsh-codex-mcp
+      name: dsh-codex-mcp
+      config:
+        # Loopback only. Binding a non-loopback address is refused unless you
+        # also set allowNonLoopback: true — the endpoint can run commands.
+        host: "127.0.0.1"
+        port: 39391
+        path: "/mcp"
+        # DSH_HOME / profile / permission mode for the child headless agent.
+        # profile must stay "headless": the desktop profile rejects --json.
+        profile: "headless"
+        permissionMode: "danger-full-access"
+        # Working directory used when a tool call omits `cwd`.
+        # Defaults to the host process cwd; Codex normally passes cwd itself.
+        # defaultCwd: "D:\\code"
+        # defaultTimeoutSec: 3600
+        # maxConcurrentRuns: 4
+        # locale: "en"          # en | zh  (tool descriptions for the MCP client)
+        # tokenFile: "~/.dsh/codex-mcp.token"
+        # includeEvents: false  # append raw NDJSON event tail to results
