@@ -14,6 +14,10 @@ Codex CLI
 
 DSH is still the agent that writes the code. Codex only dispatches the task, reads back a structured result, and re-runs the acceptance command itself.
 
+![dsh-codex-mcp: Codex dispatches to a DSH headless agent over a loopback MCP endpoint](assets/screenshot-1.png)
+
+![Install, check and dispatch from the terminal](assets/screenshot-2.png)
+
 ---
 
 ## Why a plugin and not a DSH tool

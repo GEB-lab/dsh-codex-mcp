@@ -1,6 +1,6 @@
 {
   "name": "dsh-codex-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP bridge for DSH: a loopback Streamable HTTP MCP server inside DeepSeek Harness that lets Codex dispatch coding tasks to a DSH headless agent. · 让 Codex 通过 MCP 把开发任务派给 DSH 的桥",
   "keywords": [
     "dsh",
@@ -22,6 +22,8 @@
     "lib",
     "locale",
     "scripts",
+    "assets",
+    "screenshots.json",
     "icon.svg",
     "cordis.patch.yml",
     "README.md",
